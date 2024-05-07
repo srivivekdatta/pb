@@ -1,11 +1,10 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
 import { useIdleTimer } from 'react-idle-timer';
 
 const ProtectedRoute = ({ element: Component, ...rest }) => {
-
     const idleTimerRef = useRef(null);
     const IDLE_TIMEOUT = 60000;
     const ALERT_TIMEOUT = IDLE_TIMEOUT / 2;
@@ -20,13 +19,16 @@ const ProtectedRoute = ({ element: Component, ...rest }) => {
         // User performed an action (e.g., moved the mouse, pressed a key)
         setShowAlert(false);
     };
+
     const onIdle = () => {
         // User has been idle for the specified timeout period
         // Perform logout actions here
         localStorage.removeItem('token');
         localStorage.removeItem('refreshToken');
-        window.location.href = '/sign-in';
+        localStorage.removeItem('user');
+        window.location.href = '/';
     };
+
     const { getRemainingTime, getLastActiveTime, reset } = useIdleTimer({
         timeout: IDLE_TIMEOUT,
         onIdle: onIdle,
@@ -52,6 +54,7 @@ const ProtectedRoute = ({ element: Component, ...rest }) => {
         setShowAlert(false);
         reset(); // Reset the idle timer
     };
+
     const isAuthenticated = () => {
         const token = localStorage.getItem('token');
 
@@ -73,7 +76,6 @@ const ProtectedRoute = ({ element: Component, ...rest }) => {
             }
         }
 
-        // No token found
         return false;
     };
 
@@ -90,8 +92,8 @@ const ProtectedRoute = ({ element: Component, ...rest }) => {
 
                 return true;
             } catch (error) {
-                // Failed to refresh token
                 localStorage.removeItem('token');
+                localStorage.removeItem('user');
                 localStorage.removeItem('refreshToken');
                 return false;
             }
@@ -106,14 +108,14 @@ const ProtectedRoute = ({ element: Component, ...rest }) => {
             if (isAuthenticated()) {
                 refreshToken();
             }
-        }, 5000); // Refresh token every 5 seconds
+        }, 5000);
 
         return () => {
             clearInterval(intervalId);
         };
     }, []);
 
-    return isAuthenticated() ? <Component {...rest} /> : <Navigate to="/sign-in" />;
+    return isAuthenticated() ? <Component {...rest} /> : <Navigate to="/" />;
 };
 
 export default ProtectedRoute;
