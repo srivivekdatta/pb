@@ -1,0 +1,46 @@
+/* Income.css */
+
+.income-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.income-form {
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 10px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+}
+
+input {
+    width: 100%;
+    padding: 5px;
+    font-size: 16px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.income-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.income-list li {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #f4f4f4;
+}
